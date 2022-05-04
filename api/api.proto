@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "github.com/artacone/go-url-short/api";
+
+package api;
+
+message URL {
+  string URL = 1;
+}
+
+message ShortURL {
+  string URL = 1;
+}
+
+service URLShortener {
+  rpc Create(URL) returns (ShortURL) {}
+  rpc Get(ShortURL) returns (URL) {}
+}
