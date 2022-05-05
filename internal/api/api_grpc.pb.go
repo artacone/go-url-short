@@ -18,7 +18,7 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// URLShortenerClient is the client API for URLShortener service.
+// URLShortenerClient is the client API for URLShortener services.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type URLShortenerClient interface {
@@ -52,7 +52,7 @@ func (c *uRLShortenerClient) Get(ctx context.Context, in *ShortURL, opts ...grpc
 	return out, nil
 }
 
-// URLShortenerServer is the server API for URLShortener service.
+// URLShortenerServer is the server API for URLShortener services.
 // All implementations must embed UnimplementedURLShortenerServer
 // for forward compatibility
 type URLShortenerServer interface {
@@ -73,7 +73,7 @@ func (UnimplementedURLShortenerServer) Get(context.Context, *ShortURL) (*URL, er
 }
 func (UnimplementedURLShortenerServer) mustEmbedUnimplementedURLShortenerServer() {}
 
-// UnsafeURLShortenerServer may be embedded to opt out of forward compatibility for this service.
+// UnsafeURLShortenerServer may be embedded to opt out of forward compatibility for this services.
 // Use of this interface is not recommended, as added methods to URLShortenerServer will
 // result in compilation errors.
 type UnsafeURLShortenerServer interface {
@@ -120,7 +120,7 @@ func _URLShortener_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 	return interceptor(ctx, in, info, handler)
 }
 
-// URLShortener_ServiceDesc is the grpc.ServiceDesc for URLShortener service.
+// URLShortener_ServiceDesc is the grpc.ServiceDesc for URLShortener services.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var URLShortener_ServiceDesc = grpc.ServiceDesc{
