@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  shortener:
+    container_name: shortener
+    build:
+      context: ./
+      dockerfile: build/shortener/Dockerfile
+    networks:
+      - shortener_net
+    ports:
+      - "50000:50000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      - DB_HOST=shortener_db
+      - DB_NAME=shortener
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_USE=true
+
+  db:
+    container_name: shortener_db
+    build:
+      context: ./
+      dockerfile: build/db/Dockerfile
+    networks:
+      shortener_net:
+        aliases:
+          - shortener_db
+    ports:
+      - "54321:5432"
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=shortener
+#    volumes:
+#      - ./pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d shortener"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+networks:
+  shortener_net:

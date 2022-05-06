@@ -14,9 +14,7 @@ type pg struct {
 	pool *pgxpool.Pool
 }
 
-const dsn = "host=localhost port=5432 user=postgres password=postgres dbname=shortener sslmode=disable"
-
-func newDB() (*pg, error) {
+func newDB(dsn string) (*pg, error) {
 	poolConfig, err := pgxpool.ParseConfig(dsn)
 	if err != nil {
 		return nil, err
