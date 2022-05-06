@@ -17,8 +17,8 @@ type URLShortenerServer struct {
 	pb.UnimplementedURLShortenerServer
 }
 
-func Run(mem *string) {
-	repo, err := repository.New(mem)
+func Run(dsn string) {
+	repo, err := repository.New(dsn)
 	if err != nil {
 		log.Fatalf("failed to run repo: %v", err)
 	}

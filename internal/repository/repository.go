@@ -15,13 +15,11 @@ type Repository interface {
 	GetCode(ctx context.Context, url models.URL) (models.ShortURL, error)
 }
 
-func New(mem *string) (Repository, error) {
-	switch *mem {
-	case "in":
+func New(dsn string) (Repository, error) {
+	switch dsn {
+	case "":
 		return newCache()
-	case "db":
-		return newDB()
 	default:
-		return nil, errors.New("wrong mem key")
+		return newDB(dsn)
 	}
 }
