@@ -17,8 +17,11 @@ func New(repo repository.Repository) *Shortener {
 	return &Shortener{repo: repo}
 }
 
+// Create checks if the url is already present in repository and if
+// it is, then it returns the corresponding code. Otherwise,
+// it generates a code and stores a pair (url, code) in repository.
 func (s *Shortener) Create(ctx context.Context, url models.URL) (models.ShortURL, error) {
-	if code, err := s.repo.GetCode(url); err == nil {
+	if code, err := s.repo.GetCode(ctx, url); err == nil {
 		return code, nil
 	}
 
@@ -27,22 +30,21 @@ func (s *Shortener) Create(ctx context.Context, url models.URL) (models.ShortURL
 	if err != nil {
 		return short, err
 	}
-	if _, err := s.repo.Create(url, short); err != nil {
+	if _, err := s.repo.Create(ctx, url, short); err != nil {
 		return models.ShortURL{}, err
 	}
 	return short, nil
 }
 
+// Get returns an url corresponding to the code. If the code is not present
+// in the repository, an error is returned.
 func (s *Shortener) Get(ctx context.Context, code models.ShortURL) (models.URL, error) {
-	url, err := s.repo.GetURL(code)
+	url, err := s.repo.GetURL(ctx, code)
 	return url, err
 }
 
-const (
-	alphabet    = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
-	alphabetLen = byte(len(alphabet))
-)
-
+// generateCode returns a string of length 10 which consists of
+// random alphanumeric (and '_') characters.
 func generateCode() (string, error) {
 	b := make([]byte, 10)
 	if _, err := rand.Read(b); err != nil {
@@ -50,6 +52,11 @@ func generateCode() (string, error) {
 	}
 	return encode(b), nil
 }
+
+const (
+	alphabet    = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_"
+	alphabetLen = byte(len(alphabet))
+)
 
 func encode(input []byte) string {
 	var sb strings.Builder
