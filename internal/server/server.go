@@ -17,8 +17,12 @@ type URLShortenerServer struct {
 	pb.UnimplementedURLShortenerServer
 }
 
-func Run() {
-	repo := repository.New()
+func Run(mem *string) {
+	repo, err := repository.New(mem)
+	if err != nil {
+		log.Fatalf("failed to run repo: %v", err)
+	}
+
 	shortener := services.New(repo)
 	server := URLShortenerServer{shortener: shortener}
 
@@ -27,7 +31,6 @@ func Run() {
 		log.Fatalf("failed to listen: %v", err)
 	}
 	var opts []grpc.ServerOption
-	// interceptors
 
 	grpcServer := grpc.NewServer(opts...)
 

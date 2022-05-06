@@ -14,10 +14,10 @@ type cache struct {
 	mu    sync.RWMutex
 }
 
-func newCache() *cache {
+func newCache() (*cache, error) {
 	urls := make(map[models.ShortURL]models.URL)
 	codes := make(map[models.URL]models.ShortURL)
-	return &cache{urls: urls, codes: codes}
+	return &cache{urls: urls, codes: codes}, nil
 }
 
 // Create updates url and code maps with newly received values.
