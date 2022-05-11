@@ -4,7 +4,7 @@ URL shortener written in Go.
 
 ### Build
 ```shell
-docker-compose up --build shortener db
+make run
 ```
 By default, PostgreSQL database is used as a storage.
 If `DB_USE` is set to `false` inside `docker-compose.yml`, then simple in-memory
